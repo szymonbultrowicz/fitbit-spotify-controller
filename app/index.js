@@ -3,6 +3,7 @@ import * as messaging from "messaging";
 import { keys as settingsKeys } from "../settings/constants";
 
 const notLoggedInText = document.getElementById("not-logged-in-text");
+const mainCanvas = document.getElementById("main-canvas");
 
 const toggleElement = (el, show) => el.style.display = show ? "inline" : "none";
 
@@ -11,7 +12,9 @@ messaging.peerSocket.onmessage = evt => {
   console.log(`App received: ${JSON.stringify(evt)}`);
 
   if (evt.data.key === settingsKeys.OAUTH_TOKEN) {
-    toggleElement(notLoggedInText, !evt.data.newValue);
+    const loggedIn = !!evt.data.newValue;
+    toggleElement(notLoggedInText, !loggedIn);
+    toggleElement(mainCanvas, loggedIn);
   }
 };
 

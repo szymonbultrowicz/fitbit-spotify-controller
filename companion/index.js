@@ -19,7 +19,6 @@ settingsStorage.onchange = evt => {
     key: evt.key,
     newValue: evt.newValue
   };
-  console.log("value changed: ", data);
   sendVal(data);
 };
 
@@ -52,9 +51,6 @@ function sendVal(data) {
 }
 
 function ensureSent(key, defaultValue) {
-  console.log("ensure sent");
-  console.log(key);
-  console.log(settingsStorage.getItem(key));
   if (settingsStorage.getItem(key) === null) {
     sendVal(createSettingsEntry(
       key,

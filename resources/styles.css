@@ -8,3 +8,8 @@
 #not-logged-in-text {
   display: none;
 }
+
+.button {
+  width: 50%;
+  height: 50%;
+}
