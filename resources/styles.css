@@ -1,0 +1,10 @@
+.defaultText {
+  font-size: 32;
+  font-family: System-Regular;
+  font-weight: regular;
+  text-length: 32;
+}
+
+#not-logged-in-text {
+  display: none;
+}

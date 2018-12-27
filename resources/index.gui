@@ -1,0 +1,5 @@
+<svg>
+  <use id="not-logged-in-text" href="#mixed-text-center-mid" height="100%" fill="fb-yellow">
+    <set href="#copy/text" attributeName="text-buffer" to="Go to the application settings to log in to the Spotify first"/>
+  </use>
+</svg>
