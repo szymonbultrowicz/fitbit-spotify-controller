@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "lts/*"
 cache: yarn
-script: yarn build
+script: mv config.empty.js config.js && yarn build
 addons:
   apt:
     packages:
