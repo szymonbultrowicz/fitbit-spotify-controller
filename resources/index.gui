@@ -5,17 +5,14 @@
 
   <g id="main-canvas">
     <text text-anchor="middle" x="50%" y="30" fill="white">Now playing:</text>
-    <use id="marquee" href="#marquee-text" font-size="32" y="50" width="100%" height="80" fill="white" value="80">
+    <use id="now-playing" href="#marquee-text" font-size="32" y="50" width="100%" height="80" fill="white" value="80">
       <!-- <rect width="100%" height="100%" fill="black" opacity="0.2" /> -->
-      <set href="group/text" attributeName="text-buffer" to="ACDC - Highway to hell" />
+      <set href="group/text" attributeName="text-buffer" to="---" />
       <set href="group/separator" attributeName="width" to="100" />
     </use>
 
     <use class="button" id="playButton" href="#square-button-positive" x="0" y="50%">
-      <set href="#text" attributeName="text-buffer" to=">" />
-    </use>
-    <use class="button" id="pauseButton" href="#square-button-negative" x="0" y="50%">
-      <set href="#text" attributeName="text-buffer" to="||" />
+      <set href="#text" attributeName="text-buffer" to=">||" />
     </use>
     <use class="button" id="nextButton" href="#square-button-neutral" x="50%" y="50%">
       <set href="#text" attributeName="text-buffer" to=">|" />

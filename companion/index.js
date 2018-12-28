@@ -1,11 +1,14 @@
 import * as messaging from "messaging";
 import { settingsStorage } from "settings";
 import { keys } from "../settings/constants";
+import { keys as messageKeys } from "../communication/messages"
+import { getCurrentTrack } from "./spotify";
 
 // Message socket opens
 messaging.peerSocket.onopen = () => {
   console.log("Companion Socket Open");
   restoreSettings();
+  sendTrackInfo();
 };
 
 // Message socket closes
@@ -56,5 +59,27 @@ function ensureSent(key, defaultValue) {
       key,
       defaultValue,
     ));
+  }
+}
+
+async function sendTrackInfo() {
+  return getCurrentTrack()
+    .then((data) => {
+      sendVal(createSettingsEntry(
+        messageKeys.TRACK_INFO, 
+        createTrackInfoData(data),
+      ));
+    })
+    .catch((err) => {
+      console.error("Failed to get current track info")
+      console.log(err);
+    });
+}
+
+function createTrackInfoData(spotifyData) {
+  return {
+    isPlaying: spotifyData.is_playing,
+    artist: spotifyData.item.artists.map(a => a.name).join(", "),
+    title: spotifyData.item.name,
   }
 }
