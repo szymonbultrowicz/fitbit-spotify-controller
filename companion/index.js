@@ -2,7 +2,7 @@ import * as messaging from "messaging";
 import { settingsStorage } from "settings";
 import { keys } from "../settings/constants";
 import { keys as messageKeys } from "../communication/messages"
-import { getCurrentTrack } from "./spotify";
+import { getCurrentTrack, playOrPause, nextTrack } from "./spotify";
 
 // Message socket opens
 messaging.peerSocket.onopen = () => {
@@ -14,6 +14,28 @@ messaging.peerSocket.onopen = () => {
 // Message socket closes
 messaging.peerSocket.onclose = () => {
   console.log("Companion Socket Closed");
+};
+
+messaging.peerSocket.onmessage = evt => {
+  console.log(`Companion received: ${JSON.stringify(evt)}`);
+
+  if (evt.data.key === messageKeys.PLAY_PAUSE) {
+    console.log("Got request to play/pause");
+    playOrPause()
+      .catch(err => {
+        console.error("Failed to play/pause the current track");
+        console.error(err);
+      });
+  }
+
+  if (evt.data.key === messageKeys.NEXT_TRACK) {
+    console.log("Got next track request");
+    nextTrack()
+      .catch(err => {
+        console.error("Failed to skip to the next track");
+        console.error(err);
+      });
+  }
 };
 
 // A user changes settings
