@@ -7,8 +7,24 @@ export async function getCurrentTrack() {
     return call("me/player");
 }
 
-async function call(path) {
+export async function playOrPause() {
+    return getCurrentTrack()
+        .then(track => {
+            if (track) {
+                return track.is_playing
+                    ? call("me/player/pause", "PUT")
+                    : call("me/player/play", "PUT");
+            }
+        }); 
+}
+
+export async function nextTrack() {
+    return call("me/player/next", "POST");
+}
+
+async function call(path, method = "GET") {
     return fetch(baseUrl + path, {
+        method,
         headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + getToken()

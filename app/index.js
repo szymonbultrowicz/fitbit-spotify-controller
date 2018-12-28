@@ -1,10 +1,12 @@
 import document from "document";
 import * as messaging from "messaging";
-import { keys as messageKeys } from "../communication/messages";
+import { keys as messageKeys, createMessage } from "../communication/messages";
 
 const notLoggedInText = document.getElementById("not-logged-in-text");
 const mainCanvas = document.getElementById("main-canvas");
 const nowPlayingTextEl = document.getElementById("now-playing");
+const playButton = document.getElementById("playButton");
+const nextButton = document.getElementById("nextButton");
 
 const toggleElement = (el, show) => el.style.display = show ? "inline" : "none";
 
@@ -32,5 +34,13 @@ messaging.peerSocket.onopen = () => {
 // Message socket closes
 messaging.peerSocket.onclose = () => {
   console.log("App Socket Closed");
+};
+
+playButton.onclick = () => {
+  messaging.peerSocket.send(createMessage(messageKeys.PLAY_PAUSE));
+};
+
+nextButton.onclick = () => {
+  messaging.peerSocket.send(createMessage(messageKeys.NEXT_TRACK));
 };
 
