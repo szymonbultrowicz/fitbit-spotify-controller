@@ -11,11 +11,11 @@
       <set href="group/separator" attributeName="width" to="100" />
     </use>
 
-    <use class="button" id="playButton" href="#square-button-positive" x="0" y="50%">
-      <set href="#text" attributeName="text-buffer" to=">||" />
+    <use class="button" id="playButton" href="#square-button-icon" x="0" y="50%" fill="green">
+      <set href="#image" attributeName="href" to="play.png" />
     </use>
-    <use class="button" id="nextButton" href="#square-button-neutral" x="50%" y="50%">
-      <set href="#text" attributeName="text-buffer" to=">|" />
+    <use class="button" id="nextButton" href="#square-button-icon" x="50%" y="50%" fill="gray">
+      <set href="#image" attributeName="href" to="next.png" />
     </use>
   </g>
 </svg>
