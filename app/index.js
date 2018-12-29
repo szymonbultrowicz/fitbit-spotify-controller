@@ -1,6 +1,10 @@
 import document from "document";
-import * as messaging from "messaging";
-import { keys as messageKeys, createMessage } from "../communication/messages";
+import { peerSocket } from "messaging";
+import clock from "clock";
+import { messagesKeys } from "../common/constants"
+import { sendMessage } from "../common/messages";
+
+const trackInfoInterval = 5;  // sec
 
 const notLoggedInText = document.getElementById("not-logged-in-text");
 const mainCanvas = document.getElementById("main-canvas");
@@ -11,36 +15,42 @@ const nextButton = document.getElementById("nextButton");
 const toggleElement = (el, show) => el.style.display = show ? "inline" : "none";
 
 // Message is received
-messaging.peerSocket.onmessage = evt => {
+peerSocket.onmessage = evt => {
   console.log(`App received: ${JSON.stringify(evt)}`);
 
-  if (evt.data.key === messageKeys.OAUTH_TOKEN) {
+  if (evt.data.key === messagesKeys.OAUTH_TOKEN) {
     const loggedIn = !!evt.data.newValue;
     toggleElement(notLoggedInText, !loggedIn);
     toggleElement(mainCanvas, loggedIn);
   }
 
-  if (evt.data.key === messageKeys.TRACK_INFO) {
+  if (evt.data.key === messagesKeys.TRACK_INFO) {
     const trackInfo = evt.data.newValue;
     nowPlayingTextEl.text = trackInfo.artist + " - " + trackInfo.title;
   }
 };
 
 // Message socket opens
-messaging.peerSocket.onopen = () => {
+peerSocket.onopen = () => {
   console.log("App Socket Open");
 };
 
 // Message socket closes
-messaging.peerSocket.onclose = () => {
+peerSocket.onclose = () => {
   console.log("App Socket Closed");
 };
 
 playButton.onclick = () => {
-  messaging.peerSocket.send(createMessage(messageKeys.PLAY_PAUSE));
+  sendMessage(messagesKeys.PLAY_PAUSE);
 };
 
 nextButton.onclick = () => {
-  messaging.peerSocket.send(createMessage(messageKeys.NEXT_TRACK));
+  sendMessage(messagesKeys.NEXT_TRACK);
 };
 
+clock.granularity = "seconds";
+clock.ontick = (evt) => {
+  if (evt.date.getSeconds() % trackInfoInterval === 0) {
+    sendMessage(messagesKeys.TRACK_INFO_REQUEST);
+  }
+};
