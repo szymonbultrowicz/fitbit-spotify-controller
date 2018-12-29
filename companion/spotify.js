@@ -1,5 +1,5 @@
 import { settingsStorage } from "settings";
-import { keys as settingsKeys } from "../settings/constants";
+import { settingsKeys } from "../common/constants";
 
 const baseUrl = "https://api.spotify.com/v1/";
 
