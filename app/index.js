@@ -10,9 +10,12 @@ const notLoggedInText = document.getElementById("not-logged-in-text");
 const mainCanvas = document.getElementById("main-canvas");
 const nowPlayingTextEl = document.getElementById("now-playing");
 const playButton = document.getElementById("playButton");
+const pauseButton = document.getElementById("pauseButton");
 const nextButton = document.getElementById("nextButton");
 
 const toggleElement = (el, show) => el.style.display = show ? "inline" : "none";
+
+toggleElement(pauseButton, false);
 
 // Message is received
 peerSocket.onmessage = evt => {
@@ -27,6 +30,8 @@ peerSocket.onmessage = evt => {
   if (evt.data.key === messagesKeys.TRACK_INFO) {
     const trackInfo = evt.data.newValue;
     nowPlayingTextEl.text = trackInfo.artist + " - " + trackInfo.title;
+    toggleElement(playButton, !trackInfo.isPlaying);
+    toggleElement(pauseButton, trackInfo.isPlaying);
   }
 };
 
@@ -41,6 +46,10 @@ peerSocket.onclose = () => {
 };
 
 playButton.onclick = () => {
+  sendMessage(messagesKeys.PLAY_PAUSE);
+};
+
+pauseButton.onclick = () => {
   sendMessage(messagesKeys.PLAY_PAUSE);
 };
 
