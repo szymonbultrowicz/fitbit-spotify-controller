@@ -1,5 +1,5 @@
 import { settingsKeys } from "../common/constants"
-import { spotify as spotifyConfig } from "../config";
+import { spotify as spotifyConfig, aws as awsConfig } from "../config";
 
 function mySettings(props) {
   const isLoggedIn = () => !!props.settingsStorage.getItem(settingsKeys.OAUTH_TOKEN);
@@ -17,10 +17,21 @@ function mySettings(props) {
           clientId={spotifyConfig.CLIENT_ID}
           clientSecret={spotifyConfig.CLIENT_SECRET}
           scope="user-modify-playback-state,user-read-playback-state"
-          oAuthParams={{ response_type: "token" }}
           onReturn={async (data) => {
-            console.log(JSON.stringify(data));
-            props.settingsStorage.setItem(settingsKeys.OAUTH_TOKEN, data.access_token);
+            fetch(awsConfig.URL + "?code=" + data.code, {
+              headers: {
+                Authorization: awsConfig.TOKEN,
+              },
+            })
+              .then(response => response.json())
+              .then(tokenData => {
+                console.log(JSON.stringify(tokenData));
+                props.settingsStorage.setItem(settingsKeys.OAUTH_TOKEN, tokenData.access_token);
+              })
+              .catch(err => {
+                console.error("Failed to fetch the token");
+                console.error(JSON.stringify(err));
+              });
           }}
         />
 
