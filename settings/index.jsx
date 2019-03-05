@@ -1,8 +1,11 @@
 import { settingsKeys } from "../common/constants"
 import { spotify as spotifyConfig, aws as awsConfig } from "../config";
+import { init as initOAuth, isLoggedIn, fetchTokenByCode } from "../companion/oauth";
+import { fetchUserName } from "../companion/spotify";
 
 function mySettings(props) {
-  const isLoggedIn = () => !!props.settingsStorage.getItem(settingsKeys.OAUTH_TOKEN);
+  initOAuth(props.settingsStorage);
+  console.log(props.settingsStorage.getItem(settingsKeys.OAUTH_TOKEN));
 
   return (
     <Page>
@@ -11,28 +14,18 @@ function mySettings(props) {
         <Oauth
           settingsKey="oauth"
           label={isLoggedIn() ? "Logged in" : "Login"}
-          status={props.settingsStorage.getItem(settingsKeys.OAUTH_TOKEN)}
+          status={isLoggedIn() ? props.settingsStorage.getItem(settingsKeys.SPOTIFY_USERNAME) : ""}
           authorizeUrl="https://accounts.spotify.com/authorize"
           requestTokenUrl="https://accounts.spotify.com/api/token"
           clientId={spotifyConfig.CLIENT_ID}
           clientSecret={spotifyConfig.CLIENT_SECRET}
           scope="user-modify-playback-state,user-read-playback-state"
           onReturn={async (data) => {
-            fetch(awsConfig.URL + "?code=" + data.code, {
-              headers: {
-                Authorization: awsConfig.TOKEN,
-              },
-            })
-              .then(response => response.json())
-              .then(tokenData => {
-                console.log(JSON.stringify(tokenData));
-                props.settingsStorage.setItem(settingsKeys.OAUTH_TOKEN, tokenData.access_token);
-              })
-              .catch(err => {
-                console.error("Failed to fetch the token");
-                console.error(JSON.stringify(err));
-              });
-          }}
+              fetchTokenByCode(data.code)
+                .then(() => fetchUserName())
+                .then(username => props.settingsStorage.setItem(settingsKeys.SPOTIFY_USERNAME, username));
+            }
+          }
         />
 
         {isLoggedIn() &&
