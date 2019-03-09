@@ -1,5 +1,7 @@
 export const settingsKeys = {
   OAUTH_TOKEN: "oauthAccessToken",
+  OAUTH_REFRESH_TOKEN: "oauthRefreshToken",
+  SPOTIFY_USERNAME: "spotifyUsername",
 };
 
 export const messagesKeys = {

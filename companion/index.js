@@ -3,6 +3,9 @@ import { settingsStorage } from "settings";
 import { settingsKeys, messagesKeys } from "../common/constants";
 import { getCurrentTrack, playOrPause, nextTrack } from "./spotify";
 import { sendMessage } from "../common/messages";
+import { init as initOAuth } from "./oauth";
+
+initOAuth(settingsStorage);
 
 // Message socket opens
 peerSocket.onopen = () => {
@@ -47,6 +50,7 @@ peerSocket.onmessage = evt => {
 
 // A user changes settings
 settingsStorage.onchange = evt => {
+  console.log("sending message " + evt.key + " - " + evt.newValue);
   sendMessage(evt.key, evt.newValue);
 };
 
@@ -71,22 +75,13 @@ function ensureSent(key, defaultValue) {
 
 async function sendTrackInfo() {
   return getCurrentTrack()
-    .then((data) => {
+    .then((trackInfo) => {
       sendMessage(
         messagesKeys.TRACK_INFO, 
-        createTrackInfoData(data),
+        trackInfo,
       );
     })
     .catch((err) => {
-      console.error("Failed to get current track info")
-      console.log(err);
+      console.error("Failed to get current track info:", err.message || err);
     });
-}
-
-function createTrackInfoData(spotifyData) {
-  return {
-    isPlaying: spotifyData.is_playing,
-    artist: spotifyData.item.artists.map(a => a.name).join(", "),
-    title: spotifyData.item.name,
-  }
 }

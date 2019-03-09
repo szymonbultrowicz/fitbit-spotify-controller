@@ -9,6 +9,7 @@ const trackInfoInterval = 5;  // sec
 const notLoggedInText = document.getElementById("not-logged-in-text");
 const mainCanvas = document.getElementById("main-canvas");
 const nowPlayingTextEl = document.getElementById("now-playing");
+const nowPlayingPlaceholderEl = document.getElementById("now-playing-placeholder");
 const playButton = document.getElementById("playButton");
 const pauseButton = document.getElementById("pauseButton");
 const nextButton = document.getElementById("nextButton");
@@ -29,7 +30,7 @@ peerSocket.onmessage = evt => {
 
   if (evt.data.key === messagesKeys.TRACK_INFO) {
     const trackInfo = evt.data.newValue;
-    nowPlayingTextEl.text = trackInfo.artist + " - " + trackInfo.title;
+    showTrackInfo(trackInfo);
     toggleElement(playButton, !trackInfo.isPlaying);
     toggleElement(pauseButton, trackInfo.isPlaying);
   }
@@ -63,3 +64,14 @@ clock.ontick = (evt) => {
     sendMessage(messagesKeys.TRACK_INFO_REQUEST);
   }
 };
+
+function showTrackInfo(trackInfo) {
+  if (!trackInfo.artist || !trackInfo.title) {
+    toggleElement(nowPlayingTextEl, false);
+    toggleElement(nowPlayingPlaceholderEl, true);
+  } else {
+    nowPlayingTextEl.text = trackInfo.artist + " - " + trackInfo.title;
+    toggleElement(nowPlayingPlaceholderEl, false);
+    toggleElement(nowPlayingTextEl, true);
+  }
+}

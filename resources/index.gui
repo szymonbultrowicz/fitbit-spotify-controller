@@ -7,9 +7,10 @@
     <text text-anchor="middle" x="50%" y="30" fill="white">Now playing:</text>
     <use id="now-playing" href="#marquee-text" font-size="32" y="50" width="100%" height="80" fill="white" value="80">
       <!-- <rect width="100%" height="100%" fill="black" opacity="0.2" /> -->
-      <set href="group/text" attributeName="text-buffer" to="---" />
+      <set href="group/text" attributeName="text-buffer" to="" />
       <set href="group/separator" attributeName="width" to="100" />
     </use>
+    <text id="now-playing-placeholder" text-anchor="middle" x="50%" y="100" font-size="32" fill="white">---</text>
 
     <use class="button" id="playButton" href="#square-button-icon" x="0" y="50%" fill="green">
       <set href="#image" attributeName="href" to="play.png" />
