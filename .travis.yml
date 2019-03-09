@@ -1,8 +1,8 @@
 language: node_js
 node_js:
   - "lts/*"
-cache: yarn
-script: mv config.empty.js config.js && yarn build
+cache: npm
+script: mv config.empty.js config.js && npm run build
 addons:
   apt:
     packages:
