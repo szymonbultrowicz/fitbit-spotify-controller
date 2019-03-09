@@ -11,7 +11,7 @@ export async function playOrPause() {
     return getCurrentTrack()
         .then(track => {
             if (track) {
-                return track.is_playing
+                return track.isPlaying
                     ? call("me/player/pause", "PUT")
                     : call("me/player/play", "PUT");
             }
