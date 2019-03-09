@@ -20,7 +20,6 @@ async function _fetchToken(param, value) {
         },
     })
         .then(response => {
-            console.log(response.status);
             if (response.status === 400) {
                 return response.json()
                     .then(content => {
@@ -36,16 +35,16 @@ async function _fetchToken(param, value) {
                         throw new Error(content);
                     });
             }
-            return response.text();
+            return response.json();
         })
         .then(tokenData => {
             settingsStorage.setItem(settingsKeys.OAUTH_TOKEN, tokenData.access_token);
-            settingsStorage.setItem(settingsKeys.OAUTH_REFRESH_TOKEN, tokenData.refresh);
+            settingsStorage.setItem(settingsKeys.OAUTH_REFRESH_TOKEN, tokenData.refresh_token);
         })
         .catch(err => {
             console.error("Failed to fetch the token");
             if (err && err.message) {
-                console.error("Error:", err.message);
+                console.error("Error: " + err.message);
             } else {
                 console.error("Error: " + err);
             }
@@ -61,7 +60,7 @@ async function _fetchToken(param, value) {
 }
 
 export async function fetchTokenByCode(code) {
-    console.log("fetchTokenByCode");
+    console.log("fetchTokenByCode");    
     return _fetchToken("code", code);
 }
 

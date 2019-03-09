@@ -23,17 +23,14 @@ export async function nextTrack() {
 }
 
 export async function fetchUserName() {
-    console.log("fetchUserName");
     if (!isLoggedIn()) {
         return Promise.resolve("");
     }
-    console.log("calling me");
     return call("me")
         .then(data => {
-            console.log("ME", data);
             return data;
         })
-        .then(data => data.id);
+        .then(data => data.display_name);
 }
 
 async function call(path, method = "GET", retryNo = 0) {
