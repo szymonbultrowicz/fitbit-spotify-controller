@@ -1,9 +1,11 @@
 import { peerSocket } from "messaging";
 import { settingsStorage } from "settings";
-import { settingsKeys, messagesKeys } from "../common/constants";
-import { getCurrentTrack, playOrPause, nextTrack } from "./spotify";
+
+import { messagesKeys, settingsKeys } from "../common/constants";
 import { sendMessage } from "../common/messages";
+
 import { init as initOAuth } from "./oauth";
+import { getCurrentTrack, nextTrack, playOrPause } from "./spotify";
 
 initOAuth(settingsStorage);
 
@@ -67,7 +69,7 @@ function restoreSettings() {
   ensureSent(settingsKeys.OAUTH_TOKEN);
 }
 
-function ensureSent(key, defaultValue) {
+function ensureSent(key: string, defaultValue?: string) {
   if (settingsStorage.getItem(key) === null) {
     sendMessage(key, defaultValue);
   }
@@ -78,7 +80,7 @@ async function sendTrackInfo() {
     .then((trackInfo) => {
       sendMessage(
         messagesKeys.TRACK_INFO, 
-        trackInfo,
+        JSON.stringify(trackInfo),
       );
     })
     .catch((err) => {

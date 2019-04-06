@@ -1,20 +1,24 @@
+import clock from "clock";
 import document from "document";
 import { peerSocket } from "messaging";
-import clock from "clock";
-import { messagesKeys } from "../common/constants"
+
+import { messagesKeys } from "../common/constants";
 import { sendMessage } from "../common/messages";
+import { TrackInfo } from '../common/track-info';
 
 const trackInfoInterval = 5;  // sec
 
-const notLoggedInText = document.getElementById("not-logged-in-text");
-const mainCanvas = document.getElementById("main-canvas");
-const nowPlayingTextEl = document.getElementById("now-playing");
-const nowPlayingPlaceholderEl = document.getElementById("now-playing-placeholder");
-const playButton = document.getElementById("playButton");
-const pauseButton = document.getElementById("pauseButton");
-const nextButton = document.getElementById("nextButton");
+const getElementById = (id: string) => document.getElementById(id) as StylableElement;
 
-const toggleElement = (el, show) => el.style.display = show ? "inline" : "none";
+const notLoggedInText = getElementById("not-logged-in-text");
+const mainCanvas = getElementById("main-canvas");
+const nowPlayingTextEl = getElementById("now-playing");
+const nowPlayingPlaceholderEl = getElementById("now-playing-placeholder");
+const playButton = getElementById("playButton");
+const pauseButton = getElementById("pauseButton");
+const nextButton = getElementById("nextButton");
+
+const toggleElement = (el: StylableElement, show: boolean) => el.style.display = show ? "inline" : "none";
 
 toggleElement(pauseButton, false);
 
@@ -65,7 +69,7 @@ clock.ontick = (evt) => {
   }
 };
 
-function showTrackInfo(trackInfo) {
+function showTrackInfo(trackInfo: TrackInfo) {
   if (!trackInfo.artist || !trackInfo.title) {
     toggleElement(nowPlayingTextEl, false);
     toggleElement(nowPlayingPlaceholderEl, true);

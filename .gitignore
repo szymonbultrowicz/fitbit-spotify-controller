@@ -1,5 +1,6 @@
 node_modules
 .vscode
 /config.js
+/config.ts
 /build
 .DS_Store

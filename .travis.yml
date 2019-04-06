@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "lts/*"
 cache: npm
-script: mv config.empty.js config.js && npm run build
+script: mv config.empty.ts config.ts && npm run build
 addons:
   apt:
     packages:

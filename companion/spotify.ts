@@ -1,9 +1,28 @@
 import { fetchTokenByRefreshToken, getToken, isLoggedIn } from "./oauth";
+import { TrackInfo } from '../common/track-info';
 
 const baseUrl = "https://api.spotify.com/v1/";
 
+export interface SpotifyMe {
+    display_name: string,
+}
+
+interface SpotifyArtist {
+    name: string,
+}
+
+interface SpotifyPlayerItem {
+    name: string,
+    artists: SpotifyArtist[],
+}
+
+interface SpotifyPlayer {
+    is_playing: boolean,
+    item: SpotifyPlayerItem,
+}
+
 export async function getCurrentTrack() {
-    return call("me/player")
+    return call<SpotifyPlayer>("me/player")
         .then(createTrackInfoData);
 }
 
@@ -27,13 +46,10 @@ export async function fetchUserName() {
         return Promise.resolve("");
     }
     return call("me")
-        .then(data => {
-            return data;
-        })
-        .then(data => data.display_name);
+        .then((data: SpotifyMe) => data.display_name);
 }
 
-async function call(path, method = "GET", retryNo = 0) {
+async function call<T>(path: string, method: string = "GET", retryNo = 0): Promise<T> {
     return fetch(baseUrl + path, {
         method,
         headers: {
@@ -52,7 +68,7 @@ async function call(path, method = "GET", retryNo = 0) {
     });
 }
 
-function createTrackInfoData(spotifyData) {
+function createTrackInfoData(spotifyData: SpotifyPlayer): TrackInfo {
     if (!spotifyData) {
         return {
             isPlaying: false,
