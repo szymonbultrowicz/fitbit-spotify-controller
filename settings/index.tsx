@@ -1,9 +1,11 @@
-import { settingsKeys } from "../common/constants"
-import { spotify as spotifyConfig, aws as awsConfig } from "../config";
-import { init as initOAuth, isLoggedIn, fetchTokenByCode } from "../companion/oauth";
+import { settingsKeys } from "../common/constants";
+
+import { fetchTokenByCode, init as initOAuth, isLoggedIn } from "../companion/oauth";
 import { fetchUserName } from "../companion/spotify";
 
-function mySettings(props) {
+import { spotify as spotifyConfig } from "../config";
+
+function mySettings(props: SettingsComponentProps) {
   initOAuth(props.settingsStorage);
   console.log(props.settingsStorage.getItem(settingsKeys.OAUTH_TOKEN));
 

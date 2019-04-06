@@ -1,0 +1,13 @@
+{
+  "extends": "./node_modules/@fitbit/sdk/sdk-tsconfig.json",
+  "include": [
+    "node_modules/fitbit-sdk-types/types",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "es7"
+    ]
+  }
+}

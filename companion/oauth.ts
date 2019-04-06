@@ -5,15 +5,15 @@ const INVALID_REFRESH_TOKEN = "Invalid refresh token";
 
 class InvalidRefreshTokenError extends Error {}
 
-let settingsStorage;
+let settingsStorage: LiveStorage;
 
-export function init(_settingsStorage) {
+export function init(_settingsStorage: LiveStorage) {
     if (!settingsStorage) {
         settingsStorage = _settingsStorage;
     }
 }
 
-async function _fetchToken(param, value) {
+async function _fetchToken(param: string, value: string) {
     return fetch(awsConfig.URL + "?" + param + "=" + value, {
         headers: {
             Authorization: awsConfig.TOKEN,
@@ -59,12 +59,12 @@ async function _fetchToken(param, value) {
         });
 }
 
-export async function fetchTokenByCode(code) {
+export async function fetchTokenByCode(code: string) {
     console.log("fetchTokenByCode");    
     return _fetchToken("code", code);
 }
 
-export async function fetchTokenByRefreshToken(refreshToken = undefined) {
+export async function fetchTokenByRefreshToken(refreshToken?: string) {
     if (!refreshToken) {
         refreshToken = settingsStorage.getItem(settingsKeys.OAUTH_REFRESH_TOKEN);
     }
