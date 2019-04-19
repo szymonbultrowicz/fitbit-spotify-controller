@@ -7,7 +7,6 @@ import { spotify as spotifyConfig } from "../config";
 
 function mySettings(props: SettingsComponentProps) {
   initOAuth(props.settingsStorage);
-  console.log(props.settingsStorage.getItem(settingsKeys.OAUTH_TOKEN));
 
   return (
     <Page>
@@ -25,7 +24,7 @@ function mySettings(props: SettingsComponentProps) {
           onReturn={async (data) => {
               fetchTokenByCode(data.code)
                 .then(() => fetchUserName())
-                .then(username => props.settingsStorage.setItem(settingsKeys.SPOTIFY_USERNAME, username));
+                .then((username) => props.settingsStorage.setItem(settingsKeys.SPOTIFY_USERNAME, username));
             }
           }
         />

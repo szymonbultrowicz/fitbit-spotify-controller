@@ -11,56 +11,44 @@ initOAuth(settingsStorage);
 
 // Message socket opens
 peerSocket.onopen = () => {
-  console.log("Companion Socket Open");
   restoreSettings();
   sendTrackInfo();
 };
 
-// Message socket closes
-peerSocket.onclose = () => {
-  console.log("Companion Socket Closed");
-};
-
-peerSocket.onmessage = evt => {
-  console.log(`Companion received: ${JSON.stringify(evt)}`);
+peerSocket.onmessage = (evt) => {
   const key = evt.data.key;
 
   if (key === messagesKeys.PLAY_PAUSE) {
-    console.log("Got request to play/pause");
     playOrPause()
-      .catch(err => {
+      .catch((err) => {
         console.error("Failed to play/pause the current track");
         console.error(err);
       });
   }
 
   if (key === messagesKeys.NEXT_TRACK) {
-    console.log("Got next track request");
     nextTrack()
       .then(() => sendTrackInfo())
-      .catch(err => {
+      .catch((err) => {
         console.error("Failed to skip to the next track");
         console.error(err);
       });
   }
 
   if (key === messagesKeys.TRACK_INFO_REQUEST) {
-    console.log("Got track info request");
     sendTrackInfo();
   }
 };
 
 // A user changes settings
-settingsStorage.onchange = evt => {
-  console.log("sending message " + evt.key + " - " + evt.newValue);
+settingsStorage.onchange = (evt) => {
   sendMessage(evt.key, evt.newValue);
 };
-
 
 // Restore any previously saved settings and send to the device
 function restoreSettings() {
   for (let index = 0; index < settingsStorage.length; index++) {
-    let key = settingsStorage.key(index);
+    const key = settingsStorage.key(index);
     if (key) {
       sendMessage(key, settingsStorage.getItem(key));
     }
@@ -79,7 +67,7 @@ async function sendTrackInfo() {
   return getCurrentTrack()
     .then((trackInfo) => {
       sendMessage(
-        messagesKeys.TRACK_INFO, 
+        messagesKeys.TRACK_INFO,
         JSON.stringify(trackInfo),
       );
     })
