@@ -8,7 +8,7 @@ import { TrackInfo } from '../common/track-info';
 
 const trackInfoInterval = 5;  // sec
 
-const getElementById = (id: string) => document.getElementById(id) as StylableElement;
+const getElementById = (id: string) => document.getElementById(id) as GraphicsElement;
 
 const notLoggedInText = getElementById("not-logged-in-text");
 const mainCanvas = getElementById("main-canvas");
@@ -18,7 +18,7 @@ const playButton = getElementById("playButton");
 const pauseButton = getElementById("pauseButton");
 const nextButton = getElementById("nextButton");
 
-const toggleElement = (el: StylableElement, show: boolean) => el.style.display = show ? "inline" : "none";
+const toggleElement = (el: GraphicsElement, show: boolean) => el.style.display = show ? "inline" : "none";
 
 toggleElement(pauseButton, false);
 
