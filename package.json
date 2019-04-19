@@ -23,6 +23,7 @@
     "fitbit-sdk-types": "^4.1.3",
     "io-ts": "^1.8.2",
     "nodemon": "^1.18.10",
+    "prettier": "^1.17.0",
     "tslint": "^5.16.0"
   },
   "dependencies": {
@@ -32,7 +33,8 @@
     "build": "fitbit-build",
     "watch": "nodemon --exec npm run build",
     "lint": "tslint --project .",
-    "ci": "npm run build && npm run lint"
+    "check-formatting": "prettier -c **/*.ts",
+    "ci": "npm run build && npm run lint && npm run check-formatting"
   },
   "nodemonConfig": {
     "ext": "ts,tsx,png,gui,css,json"

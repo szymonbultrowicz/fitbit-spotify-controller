@@ -5,9 +5,10 @@ import { messagesKeys } from "../common/constants";
 import { sendMessage } from "../common/messages";
 import { TrackInfo } from "../common/track-info";
 
-const trackInfoInterval = 5;  // sec
+const trackInfoInterval = 5; // sec
 
-const getElementById = (id: string) => document.getElementById(id) as GraphicsElement;
+const getElementById = (id: string) =>
+  document.getElementById(id) as GraphicsElement;
 
 const notLoggedInText = getElementById("not-logged-in-text");
 const mainCanvas = getElementById("main-canvas");
@@ -17,7 +18,8 @@ const playButton = getElementById("playButton");
 const pauseButton = getElementById("pauseButton");
 const nextButton = getElementById("nextButton");
 
-const toggleElement = (el: GraphicsElement, show: boolean) => el.style.display = show ? "inline" : "none";
+const toggleElement = (el: GraphicsElement, show: boolean) =>
+  (el.style.display = show ? "inline" : "none");
 
 toggleElement(pauseButton, false);
 
