@@ -19,11 +19,10 @@ peerSocket.onmessage = (evt) => {
   const key = evt.data.key;
 
   if (key === messagesKeys.PLAY_PAUSE) {
-    playOrPause()
-      .catch((err) => {
-        console.error("Failed to play/pause the current track");
-        console.error(err);
-      });
+    playOrPause().catch((err) => {
+      console.error("Failed to play/pause the current track");
+      console.error(err);
+    });
   }
 
   if (key === messagesKeys.NEXT_TRACK) {
@@ -66,10 +65,7 @@ function ensureSent(key: string, defaultValue?: string) {
 async function sendTrackInfo() {
   return getCurrentTrack()
     .then((trackInfo) => {
-      sendMessage(
-        messagesKeys.TRACK_INFO,
-        JSON.stringify(trackInfo),
-      );
+      sendMessage(messagesKeys.TRACK_INFO, JSON.stringify(trackInfo));
     })
     .catch((err) => {
       console.error("Failed to get current track info:", err.message || err);

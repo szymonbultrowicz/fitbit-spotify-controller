@@ -1,5 +1,5 @@
 export interface TrackInfo {
-    isPlaying: boolean,
-    artist?: string,
-    title?: string,
+  isPlaying: boolean;
+  artist?: string;
+  title?: string;
 }
