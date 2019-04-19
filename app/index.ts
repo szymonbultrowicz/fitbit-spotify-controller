@@ -1,10 +1,9 @@
 import clock from "clock";
 import document from "document";
 import { peerSocket } from "messaging";
-
 import { messagesKeys } from "../common/constants";
 import { sendMessage } from "../common/messages";
-import { TrackInfo } from '../common/track-info';
+import { TrackInfo } from "../common/track-info";
 
 const trackInfoInterval = 5;  // sec
 
@@ -23,9 +22,7 @@ const toggleElement = (el: GraphicsElement, show: boolean) => el.style.display =
 toggleElement(pauseButton, false);
 
 // Message is received
-peerSocket.onmessage = evt => {
-  console.log(`App received: ${JSON.stringify(evt)}`);
-
+peerSocket.onmessage = (evt) => {
   if (evt.data.key === messagesKeys.OAUTH_TOKEN) {
     const loggedIn = !!evt.data.newValue;
     toggleElement(notLoggedInText, !loggedIn);
@@ -38,16 +35,6 @@ peerSocket.onmessage = evt => {
     toggleElement(playButton, !trackInfo.isPlaying);
     toggleElement(pauseButton, trackInfo.isPlaying);
   }
-};
-
-// Message socket opens
-peerSocket.onopen = () => {
-  console.log("App Socket Open");
-};
-
-// Message socket closes
-peerSocket.onclose = () => {
-  console.log("App Socket Closed");
 };
 
 playButton.onclick = () => {

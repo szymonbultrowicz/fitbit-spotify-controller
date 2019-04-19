@@ -7,6 +7,7 @@ class InvalidRefreshTokenError extends Error {}
 
 let settingsStorage: LiveStorage;
 
+// tslint:disable-next-line: variable-name
 export function init(_settingsStorage: LiveStorage) {
     if (!settingsStorage) {
         settingsStorage = _settingsStorage;
@@ -19,10 +20,10 @@ async function _fetchToken(param: string, value: string) {
             Authorization: awsConfig.TOKEN,
         },
     })
-        .then(response => {
+        .then((response) => {
             if (response.status === 400) {
                 return response.json()
-                    .then(content => {
+                    .then((content) => {
                         if (content.message === INVALID_REFRESH_TOKEN) {
                             throw new InvalidRefreshTokenError(INVALID_REFRESH_TOKEN);
                         }
@@ -31,17 +32,17 @@ async function _fetchToken(param: string, value: string) {
             }
             if (response.status > 400) {
                 return response.text()
-                    .then(content => {
+                    .then((content) => {
                         throw new Error(content);
                     });
             }
             return response.json();
         })
-        .then(tokenData => {
+        .then((tokenData) => {
             settingsStorage.setItem(settingsKeys.OAUTH_TOKEN, tokenData.access_token);
             settingsStorage.setItem(settingsKeys.OAUTH_REFRESH_TOKEN, tokenData.refresh_token);
         })
-        .catch(err => {
+        .catch((err) => {
             console.error("Failed to fetch the token");
             if (err && err.message) {
                 console.error("Error: " + err.message);
@@ -50,7 +51,6 @@ async function _fetchToken(param: string, value: string) {
             }
 
             if (err instanceof InvalidRefreshTokenError) {
-                console.log("Clearing old tokens");
                 settingsStorage.removeItem(settingsKeys.OAUTH_TOKEN);
                 settingsStorage.removeItem(settingsKeys.OAUTH_REFRESH_TOKEN);
             }
@@ -60,7 +60,6 @@ async function _fetchToken(param: string, value: string) {
 }
 
 export async function fetchTokenByCode(code: string) {
-    console.log("fetchTokenByCode");    
     return _fetchToken("code", code);
 }
 

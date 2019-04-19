@@ -1,24 +1,24 @@
+import { TrackInfo } from "../common/track-info";
 import { fetchTokenByRefreshToken, getToken, isLoggedIn } from "./oauth";
-import { TrackInfo } from '../common/track-info';
 
 const baseUrl = "https://api.spotify.com/v1/";
 
 export interface SpotifyMe {
-    display_name: string,
+    display_name: string;
 }
 
 interface SpotifyArtist {
-    name: string,
+    name: string;
 }
 
 interface SpotifyPlayerItem {
-    name: string,
-    artists: SpotifyArtist[],
+    name: string;
+    artists: SpotifyArtist[];
 }
 
 interface SpotifyPlayer {
-    is_playing: boolean,
-    item: SpotifyPlayerItem,
+    is_playing: boolean;
+    item: SpotifyPlayerItem;
 }
 
 export async function getCurrentTrack() {
@@ -28,13 +28,13 @@ export async function getCurrentTrack() {
 
 export async function playOrPause() {
     return getCurrentTrack()
-        .then(track => {
+        .then((track) => {
             if (track) {
                 return track.isPlaying
                     ? call("me/player/pause", "PUT")
                     : call("me/player/play", "PUT");
             }
-        }); 
+        });
 }
 
 export async function nextTrack() {
@@ -54,13 +54,11 @@ async function call<T>(path: string, method: string = "GET", retryNo = 0): Promi
         method,
         headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + getToken(),
+            "Authorization": "Bearer " + getToken(),
         },
     })
-    .then(response => {
-        console.log(response.status);
+    .then((response) => {
         if (response.status === 401 && retryNo < 1) {
-            console.log("Unauthorized, attempt to get new access token: " + (retryNo + 1));
             return fetchTokenByRefreshToken()
                 .then(() => call(path, method, retryNo + 1));
         }
@@ -72,12 +70,11 @@ function createTrackInfoData(spotifyData: SpotifyPlayer): TrackInfo {
     if (!spotifyData) {
         return {
             isPlaying: false,
-        }
+        };
     }
     return {
       isPlaying: spotifyData.is_playing,
-      artist: spotifyData.item.artists.map(a => a.name).join(", "),
+      artist: spotifyData.item.artists.map((a) => a.name).join(", "),
       title: spotifyData.item.name,
-    }
+    };
   }
-  
